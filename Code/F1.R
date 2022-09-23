@@ -91,6 +91,6 @@ PA <- ggplot(O, aes(feature, method)) +
   
 PB <- ggplot() + theme_void() + labs(tag = 'A')
 pDesign <- 'AAABB'
-png('bm.png', width = 3300, height = 1650, res = 300)  
+png('F1.png', width = 3300, height = 1650, res = 300)  
 PB + PA + plot_layout(design = pDesign)
 dev.off()

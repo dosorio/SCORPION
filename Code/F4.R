@@ -95,13 +95,12 @@ betasPlot <- apply(A, 1, function(X){
   })
 
 betasPlot[[1]] <- betasPlot[[1]] + labs(tag = 'A')
-eval(parse(text = paste0(paste0('betasPlot[[', seq_along(betasPlot), ']]'), collapse = ' +')))
-
-png('../Figures/betasPlot.png', width = 2000, height = 1800, res = 300)
-eval(parse(text = paste0(paste0('betasPlot[[', seq_along(betasPlot), ']]'), collapse = ' +')))
-dev.off()
-
-"betasPlot[[1]] +betasPlot[[2]] +betasPlot[[3]] +betasPlot[[4]] +betasPlot[[5]] +betasPlot[[6]]"
+# eval(parse(text = paste0(paste0('betasPlot[[', seq_along(betasPlot), ']]'), collapse = ' +')))
+# 
+# png('../Figures/betasPlot.png', width = 2000, height = 1800, res = 300)
+# eval(parse(text = paste0(paste0('betasPlot[[', seq_along(betasPlot), ']]'), collapse = ' +')))
+# dev.off()
+# "betasPlot[[1]] +betasPlot[[2]] +betasPlot[[3]] +betasPlot[[4]] +betasPlot[[5]] +betasPlot[[6]]"
 
 crcBetas <- read.csv('../Results/dNet-Epithelial-Betas.csv')
 outDegree <- crcBetas %>% group_by(tf) %>% summarise(W = sum(beta))
@@ -110,6 +109,8 @@ outDegree$R <- seq_along(outDegree[[1]])
 outDegree <- outDegree[complete.cases(outDegree),]
 outDegree$label <- outDegree$tf
 outDegree$label[11:(nrow(outDegree)-10)] <- NA
+write.csv(outDegree[,1:3], row.names = FALSE, quote = FALSE, file = '../Results/CRC-tfRanks.csv')
+
 PB <- ggplot(outDegree, aes(R, W, color = W, label = label)) + 
   geom_point() + 
   theme_bw() + 
@@ -139,6 +140,10 @@ UR <- E[E$NES > 0,]
 DR <- E[E$NES < 0,]
 UR$pathway <- factor(UR$pathway, levels = UR$pathway)
 DR$pathway <- factor(DR$pathway, levels = DR$pathway)
+
+E <- rbind(UR,DR)
+E$leadingEdge <- unlist(lapply(E$leadingEdge, function(X){paste0(X, collapse = ';')}))
+write.csv(E, quote = FALSE, row.names = FALSE, file = '../Results/CRC-EnrichmentPathways.csv')
 
 PC <- ggplot(UR, aes(NES, pathway, fill = -log10(pval))) +
   geom_bar(stat = 'identity') +

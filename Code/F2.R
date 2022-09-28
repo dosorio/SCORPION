@@ -312,7 +312,7 @@ markers8CL <- rownames(FindMarkers(ALL, ident.1 = 10, logfc.threshold = 1))
 
 
 WT <- ALL@assays$RNA@counts[,ALL$orig.ident == 'WT']
-OE <- ALL@assays$RNA@counts[,(ALL$orig.ident == 'OE') & (ALL$seurat_clusters == 9)]
+OE <- ALL@assays$RNA@counts[,(ALL$orig.ident == 'OE') & (ALL$seurat_clusters == 10)]
 
 WT <- WT[rowMeans(WT != 0) > 0.05,]
 OE <- OE[rowMeans(OE != 0) > 0.05,]
